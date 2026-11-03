@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import CartPage from './CartPage';
 import { CartContext, CartItem } from '../context/CartContext';
@@ -42,13 +42,13 @@ const mockCartItems: CartItem[] = [
     }
 ];
 
-const mockCartContext = {
-    cartItems: mockCartItems,
+const createCartContext = (cartItems = mockCartItems) => ({
+    cartItems,
     addToCart: vi.fn(),
     clearCart: vi.fn()
-};
+});
 
-const renderWithCartContext = (cartContext = mockCartContext) => {
+const renderWithCartContext = (cartContext = createCartContext()) => {
     return render(
         <CartContext.Provider value={cartContext}>
             <CartPage />
@@ -71,5 +71,54 @@ describe('CartPage', () => {
         expect(screen.getByText('Price: $49.99')).toBeInTheDocument();
         expect(screen.getByText('Quantity: 2')).toBeInTheDocument();
         expect(screen.getByText('Quantity: 1')).toBeInTheDocument();
+    });
+
+    it('displays empty cart message when cart is empty', () => {
+        renderWithCartContext(createCartContext([]));
+        expect(screen.getByText(/Your cart is empty/i)).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Checkout' })).not.toBeInTheDocument();
+    });
+
+    it('renders only the item supplied in a single-item cart', () => {
+        renderWithCartContext(createCartContext([mockCartItems[0]]));
+        expect(screen.getByText('Test Product 1')).toBeInTheDocument();
+        expect(screen.queryByText('Test Product 2')).not.toBeInTheDocument();
+    });
+
+    it('opens the checkout confirmation when checkout is selected', () => {
+        renderWithCartContext();
+
+        fireEvent.click(screen.getByRole('button', { name: 'Checkout' }));
+
+        expect(screen.getByTestId('checkout-modal')).toBeInTheDocument();
+    });
+
+    it('closes checkout confirmation without clearing the cart when canceled', () => {
+        const cartContext = createCartContext();
+        renderWithCartContext(cartContext);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Checkout' }));
+        fireEvent.click(screen.getByTestId('cancel-checkout'));
+
+        expect(screen.queryByTestId('checkout-modal')).not.toBeInTheDocument();
+        expect(cartContext.clearCart).not.toHaveBeenCalled();
+        expect(screen.getByText('Test Product 1')).toBeInTheDocument();
+    });
+
+    it('clears the cart and displays the processed order after confirmation', () => {
+        const cartContext = createCartContext();
+        renderWithCartContext(cartContext);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Checkout' }));
+        fireEvent.click(screen.getByTestId('confirm-checkout'));
+
+        expect(cartContext.clearCart).toHaveBeenCalledOnce();
+        expect(screen.getByText('Your order has been processed!')).toBeInTheDocument();
+        expect(screen.getByText('Test Product 1')).toBeInTheDocument();
+        expect(screen.queryByTestId('checkout-modal')).not.toBeInTheDocument();
+    });
+
+    it('requires a cart context provider', () => {
+        expect(() => render(<CartPage />)).toThrow('CartContext must be used within a CartProvider');
     });
 });
