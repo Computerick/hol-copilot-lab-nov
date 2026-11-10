@@ -4,6 +4,26 @@ This repository contains a hands-on training program for developers and other te
 
 The training uses a sample e-commerce project as a practical environment, but the main subject is GitHub Copilot: how to understand its modes, provide effective context, delegate work, connect external tools, create reusable Skills, and configure specialized Agents.
 
+# The Daily Harvest
+
+A demo e-commerce application built with React, TypeScript, and Vite. It includes a product catalog, shopping cart, product reviews, simulated checkout, and a basic admin area. It has no backend: cart contents and reviews are kept only in application state, checkout does not process payments, and admin promotions do not change catalog prices.
+
+## Quick Start Guide
+
+### Prerequisites
+
+- Node.js 18 or later
+- npm
+
+### Set up and run locally
+
+From the repository root:
+
+``bash
+cd eCommApp
+npm install
+npm run dev
+
 ## Training Goals
 
 By completing the Labs, participants will learn how to:
