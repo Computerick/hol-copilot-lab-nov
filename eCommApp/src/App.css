@@ -34,9 +34,26 @@
   transition: all 0.3s ease;
 }
 
+.app-header nav .contact-us-link {
+  color: white;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
 .app-header nav a:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
+}
+
+.app-header nav .contact-us-link:hover,
+.app-header nav .contact-us-link:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .main-content {
@@ -226,6 +243,70 @@
   position: relative;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   color: #333;
+}
+
+.contact-us-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  width: min(90vw, 500px);
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 2rem;
+  border: 0;
+  border-radius: 8px;
+  color: #333;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.contact-us-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.contact-us-dialog h2 {
+  margin-top: 0;
+}
+
+.contact-us-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-us-form input,
+.contact-us-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.contact-us-form textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.contact-us-form button,
+.contact-us-dialog [role="status"] button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 4px;
+  background-color: #667eea;
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.contact-us-form button:hover,
+.contact-us-dialog [role="status"] button:hover {
+  background-color: #5a6fd8;
 }
 
 .close-button {
