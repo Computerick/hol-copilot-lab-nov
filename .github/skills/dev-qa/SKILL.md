@@ -23,6 +23,7 @@ Use this Skill for unit tests in the Daily Harvest app. Work only on tests; do n
 - Keep failure messages useful through specific test names, precise expected values, and semantic queries. Add a custom assertion message only when it clarifies context that the matcher cannot provide.
 - Keep tests fast: avoid real I/O, arbitrary sleeps, redundant renders, and unnecessary broad mocks. Use `findBy*` or `waitFor` only for genuinely asynchronous behavior.
 - Prefer a simple, maintainable test structure. Extract render helpers only for repeated setup, and keep each test's important inputs and behavior easy to see.
+- Create a test file for the coverage of each component, keeping them separate—that is, do not include a different scenario within a component that has a different name.
 - Run the focused test file or `npm run test:run` from `eCommApp` after changing tests.
 
 ## Example reference
